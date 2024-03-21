@@ -6,11 +6,12 @@ import {
   IoPawOutline
 } from 'react-icons/io5';
 import { WhiteCard } from '../../components';
-import { useBearStore } from '../../stores';
+import { useBearStore, usePersonStore } from '../../stores';
 
 export const Dashboard = () => {
 
-  const totalBears = useBearStore(state => state.computed.totalBears);
+  const totalBears = useBearStore(state => state.totalBears);
+  const name = usePersonStore(state => state.name);
 
   return (
     <>
@@ -25,7 +26,7 @@ export const Dashboard = () => {
             className="text-indigo-600"
           />
           <h2>Osos</h2>
-          <p> {totalBears}</p>
+          <p> {totalBears()}</p>
         </WhiteCard>
 
         <WhiteCard centered>
@@ -34,7 +35,7 @@ export const Dashboard = () => {
             className="text-indigo-600"
           />
           <h2>Persona</h2>
-          <p>Información</p>
+          <p>{name}</p>
         </WhiteCard>
 
         <WhiteCard centered>
