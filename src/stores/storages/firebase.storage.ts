@@ -1,28 +1,38 @@
 import { StateStorage, createJSONStorage } from 'zustand/middleware';
 
-const FIREBASE_URL = 'https://zustand-storage-5f16a-default-rtdb.firebaseio.com/zustand';
+const firebaseUrl = 'https://zustand-storage-default-rtdb.firebaseio.com/zustand';
 
-const storageAPI: StateStorage = {
-  getItem: async function (name: string): Promise<string | null> {
+
+
+const storageApi: StateStorage =  {
+
+  getItem: async function ( name: string ): Promise<string | null> {
+    
     try {
-      const data = await fetch(`${FIREBASE_URL}/${name}.json`).then(res => res.json());
+      const data = await fetch(`${ firebaseUrl }/${ name }.json`).then( res => res.json());
+      return JSON.stringify( data );
 
-      return JSON.stringify(data);
     } catch (error) {
-      throw new Error('Error al obtener el item de la base de datos de firebase');
+      throw error;
     }
+
   },
-  setItem: async function (name: string, value: string): Promise<void> {
-    await fetch(`${FIREBASE_URL}/${name}.json`, {
+
+  setItem: async function ( name: string, value: string ): Promise<void> {
+    await fetch(`${ firebaseUrl }/${ name }.json`, {
       method: 'PUT',
       body: value
-    }).then(res => res.json());
+    }).then( res => res.json());
+
+    // console.count('setItem');
 
     return;
   },
-  removeItem: function (name: string): unknown {
-    return sessionStorage.removeItem(name);
-  }
-};
 
-export const firebaseStorage = createJSONStorage(() => storageAPI);
+  removeItem: function ( name: string ): void | Promise<void> {
+    console.log('removeItem', name);
+  }
+}
+
+
+export const firebaseStorage = createJSONStorage( () => storageApi  );
